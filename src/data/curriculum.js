@@ -1,0 +1,268 @@
+// src/data/curriculum.js
+
+export const trackFotografi = {
+  id: 'fotografi',
+  title: 'Fotografi',
+  description: 'Belajar menangkap momen dengan cahaya dan komposisi.',
+  levels: [
+    {
+      id: 'photo-lvl-1',
+      level: 1,
+      title: 'Pengamat',
+      xpRequired: 0,
+      units: [
+        { 
+          id: 'photo-1-1', 
+          title: 'Anatomi Kamera', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Memahami Senjata Utamamu</h3>
+            <p>Kamera modern, baik itu DSLR maupun Mirrorless, pada dasarnya memiliki komponen utama yang sama. Menguasai letak dan fungsi masing-masing adalah langkah pertama menjadi fotografer handal.</p>
+            <img src="/images/kamera.png" alt="Anatomi Kamera" style="width:100%; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);" />
+            <ul>
+              <li><strong>Body & Sensor:</strong> Jantung dari kamera yang menangkap cahaya dan mengubahnya menjadi gambar digital.</li>
+              <li><strong>Viewfinder:</strong> Jendela bidik untuk melihat komposisi sebelum menekan tombol shutter.</li>
+              <li><strong>Mode Dial:</strong> Roda bergerigi untuk memilih mode pemotretan (Auto, Manual, Aperture Priority, dll).</li>
+            </ul>
+            <p>Jangan takut bereksperimen dengan tombol-tombol ini. Kamera tidak akan rusak hanya karena Anda salah memutar <em>dial</em>!</p>
+          `
+        },
+        { 
+          id: 'photo-1-2', 
+          title: 'Jenis-jenis Lensa', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Mata Kedua Fotografer</h3>
+            <p>Lensa menentukan seberapa luas atau sempit dunia yang bisa ditangkap oleh kameramu.</p>
+            <img src="/images/lensa.png" alt="Jenis Lensa" style="width:100%; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);" />
+            <ul>
+              <li><strong>Lensa Wide (Misal 16-35mm):</strong> Sangat cocok untuk pemandangan (lanskap) dan arsitektur karena sudut pandangnya yang lebar.</li>
+              <li><strong>Lensa Prime (Misal 50mm):</strong> Tidak bisa di-zoom, namun kualitasnya sangat tajam dan biasanya memiliki bukaan (aperture) besar untuk efek blur (bokeh). Cocok untuk potret.</li>
+              <li><strong>Lensa Telefoto (Misal 70-200mm):</strong> Digunakan untuk menangkap objek dari jarak jauh, sangat populer di fotografi olahraga dan satwa liar.</li>
+            </ul>
+          `
+        },
+        { 
+          id: 'photo-1-3', 
+          title: 'Perlengkapan Pendukung', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Di Luar Kamera dan Lensa</h3>
+            <p>Selain kamera dan lensa, ada beberapa aksesori yang sangat membantu proses pemotretan:</p>
+            <ul>
+              <li><strong>Tripod:</strong> Membantu menjaga kamera tetap stabil, terutama saat menggunakan <em>shutter speed</em> lambat.</li>
+              <li><strong>Flash Eksternal:</strong> Memberikan kontrol cahaya buatan yang jauh lebih baik daripada flash bawaan kamera.</li>
+              <li><strong>Filter Lensa (UV / CPL / ND):</strong> Melindungi lensa depan atau memberikan efek khusus pada gambar (seperti menggelapkan langit atau membuat air mengalir terlihat lembut).</li>
+            </ul>
+          `
+        },
+        { id: 'photo-1-quiz', title: 'Kuis Pengenalan Alat', type: 'quiz', xp: 50 }
+      ]
+    },
+    {
+      id: 'photo-lvl-2',
+      level: 2,
+      title: 'Penjepret',
+      xpRequired: 200,
+      units: [
+        { 
+          id: 'photo-2-1', 
+          title: 'Apa itu Eksposur?', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Harmoni Cahaya</h3>
+            <p>Eksposur adalah tentang seberapa terang atau gelap foto yang dihasilkan. Foto yang terlalu terang disebut <em>overexposed</em>, sementara yang terlalu gelap disebut <em>underexposed</em>.</p>
+            <img src="/images/eksposur.png" alt="Segitiga Eksposur" style="width:100%; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);" />
+            <p>Ada tiga elemen utama yang mengatur eksposur ini, yang dikenal sebagai <strong>Segitiga Eksposur</strong>: ISO, Aperture, dan Shutter Speed.</p>
+          `
+        },
+        { 
+          id: 'photo-2-2', 
+          title: 'ISO: Sensitivitas Cahaya', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Sensitivitas Sensor</h3>
+            <p>ISO menentukan seberapa sensitif sensor kamera terhadap cahaya.</p>
+            <ul>
+              <li><strong>ISO Rendah (100 - 400):</strong> Digunakan saat cuaca cerah di luar ruangan. Hasil foto sangat jernih dan bebas "noise" (bintik-bintik).</li>
+              <li><strong>ISO Tinggi (1600 - 6400+):</strong> Digunakan saat kondisi minim cahaya (malam hari, dalam ruangan gelap). Namun komprominya, gambar akan memiliki banyak <em>noise</em>.</li>
+            </ul>
+          `
+        },
+        { 
+          id: 'photo-2-3', 
+          title: 'Aperture: Bukaan Lensa', 
+          type: 'video', 
+          xp: 30,
+          content: `
+            <h3>Mengatur Bukaan Lensa</h3>
+            <p>Aperture (atau f-stop) seperti pupil mata kita. Semakin besar ia terbuka, semakin banyak cahaya yang masuk.</p>
+            <div style="background: rgba(0,0,0,0.5); padding: 3rem; text-align: center; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);">
+              <span style="color: var(--text-muted);">▶ Simulasi Video: Memahami Aperture (f/1.4 vs f/16)</span>
+            </div>
+            <ul>
+              <li><strong>Aperture Besar (Misal f/1.8):</strong> Cahaya masuk lebih banyak, dan <em>Depth of Field</em> menjadi dangkal (background menjadi blur/bokeh). Cocok untuk foto potret.</li>
+              <li><strong>Aperture Kecil (Misal f/11):</strong> Cahaya masuk lebih sedikit, dan seluruh area gambar dari depan ke belakang menjadi tajam. Cocok untuk foto pemandangan.</li>
+            </ul>
+          `
+        },
+        { 
+          id: 'photo-2-4', 
+          title: 'Shutter Speed', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Membekukan Waktu</h3>
+            <p>Shutter speed adalah seberapa lama sensor kamera "terbuka" untuk menangkap cahaya.</p>
+            <ul>
+              <li><strong>Shutter Speed Cepat (Misal 1/1000 detik):</strong> Membekukan gerakan (freeze motion). Sangat berguna untuk olahraga atau burung yang terbang.</li>
+              <li><strong>Shutter Speed Lambat (Misal 1/10 detik atau lebih lambat):</strong> Membuat efek pergerakan menjadi blur (motion blur), seperti efek air terjun yang selembut kapas atau lampu mobil yang memanjang di malam hari. <em>Biasanya membutuhkan tripod!</em></li>
+            </ul>
+          `
+        },
+        { id: 'photo-2-quiz', title: 'Kuis Segitiga Eksposur', type: 'quiz', xp: 80 }
+      ]
+    },
+    {
+      id: 'photo-lvl-3',
+      level: 3,
+      title: 'Komposer',
+      xpRequired: 500,
+      units: [] // Placeholder for Phase 2
+    }
+  ]
+};
+
+export const trackDesain = {
+  id: 'desain',
+  title: 'Desain Grafis',
+  description: 'Berkomunikasi melalui visual, tipografi, dan ruang.',
+  levels: [
+    {
+      id: 'design-lvl-1',
+      level: 1,
+      title: 'Pengamat Estetika',
+      xpRequired: 0,
+      units: [
+        { 
+          id: 'design-1-1', 
+          title: 'Apa itu Desain Grafis?', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Lebih dari Sekadar "Cantik"</h3>
+            <p>Desain grafis bukan hanya tentang membuat sesuatu terlihat estetis atau indah. Pada intinya, desain grafis adalah <strong>komunikasi visual</strong> dan <strong>pemecahan masalah</strong>.</p>
+            <img src="/images/desain.png" alt="Konsep Desain" style="width:100%; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);" />
+            <p>Setiap warna, bentuk, garis, dan huruf yang Anda pilih harus memiliki tujuan yang mendukung pesan yang ingin disampaikan.</p>
+          `
+        },
+        { 
+          id: 'design-1-2', 
+          title: 'Elemen Dasar Desain', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Blok Bangunan Visual</h3>
+            <p>Setiap desain tersusun dari elemen-elemen dasar berikut:</p>
+            <ul>
+              <li><strong>Garis (Line):</strong> Membagi ruang, mengarahkan mata, atau menekankan kata.</li>
+              <li><strong>Bentuk (Shape):</strong> Area 2D yang dibatasi (bisa geometris seperti lingkaran/persegi, atau organik).</li>
+              <li><strong>Warna (Color):</strong> Mengatur <em>mood</em> dan emosi. Warna merah bisa berarti semangat atau bahaya, biru bisa berarti tenang atau profesional.</li>
+              <li><strong>Ruang (Space / Negative Space):</strong> Area kosong di antara elemen desain, sangat krusial agar desain bisa "bernapas".</li>
+            </ul>
+          `
+        },
+        { 
+          id: 'design-1-3', 
+          title: 'Prinsip Desain', 
+          type: 'video', 
+          xp: 30,
+          content: `
+            <h3>Aturan Main</h3>
+            <p>Jika elemen adalah bahan baku, maka prinsip desain adalah resep cara menyatukannya.</p>
+            <div style="background: rgba(0,0,0,0.5); padding: 3rem; text-align: center; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);">
+              <span style="color: var(--text-muted);">▶ Simulasi Video: Kontras dan Repetisi</span>
+            </div>
+            <ul>
+              <li><strong>Kontras:</strong> Membuat dua hal terlihat sangat berbeda (gelap vs terang, besar vs kecil). Kontras menarik perhatian mata.</li>
+              <li><strong>Keseimbangan (Balance):</strong> Distribusi visual elemen. Bisa simetris (sama rata kiri-kanan) atau asimetris (berbeda namun tetap terasa seimbang).</li>
+            </ul>
+          `
+        },
+        { id: 'design-1-quiz', title: 'Kuis Tujuan Desain', type: 'quiz', xp: 50 }
+      ]
+    },
+    {
+      id: 'design-lvl-2',
+      level: 2,
+      title: 'Penyusun',
+      xpRequired: 200,
+      units: [
+        { 
+          id: 'design-2-1', 
+          title: 'Hirarki Visual', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Mengarahkan Mata Pembaca</h3>
+            <p>Hirarki visual adalah cara desainer mengontrol urutan informasi mana yang dibaca audiens terlebih dahulu, kedua, dan seterusnya.</p>
+            <img src="/images/hirarki.png" alt="Hirarki Visual" style="width:100%; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);" />
+            <p>Tanpa hirarki, sebuah desain akan terasa kacau karena semua elemen "berteriak" meminta perhatian dalam waktu bersamaan.</p>
+          `
+        },
+        { 
+          id: 'design-2-2', 
+          title: 'Ukuran, Warna & Posisi', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Alat Menciptakan Hirarki</h3>
+            <p>Bagaimana cara kita membuat hirarki yang baik?</p>
+            <ul>
+              <li><strong>Ukuran:</strong> Secara alami, mata kita akan melihat elemen yang paling besar terlebih dahulu.</li>
+              <li><strong>Warna:</strong> Warna yang cerah dan kontras (misal kuning terang di atas latar gelap) akan langsung menarik perhatian dibanding warna abu-abu atau pudar.</li>
+              <li><strong>Posisi:</strong> Dalam budaya baca Barat/Indonesia, kita terbiasa membaca dari Kiri ke Kanan, Atas ke Bawah. Menempatkan informasi penting di bagian atas (Top Left) adalah teknik yang efektif.</li>
+            </ul>
+          `
+        },
+        { 
+          id: 'design-2-3', 
+          title: 'Focal Point dan Flow', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Titik Pusat dan Aliran Visual</h3>
+            <p><strong>Focal Point</strong> adalah elemen pertama yang ditangkap mata. Bisa berupa <em>headline</em> yang sangat besar, atau gambar orang yang menatap langsung ke audiens.</p>
+            <p><strong>Flow</strong> adalah jalur yang diambil mata setelah melihat focal point. Desainer menggunakan garis, tatapan mata subjek dalam foto, atau elemen repetisi untuk memandu mata audiens menjelajahi sisa informasi dalam desain tersebut.</p>
+          `
+        },
+        { id: 'design-2-quiz', title: 'Kuis Hirarki Visual', type: 'quiz', xp: 80 }
+      ]
+    },
+    {
+      id: 'design-lvl-3',
+      level: 3,
+      title: 'Tipografer',
+      xpRequired: 500,
+      units: [] // Placeholder for Phase 2
+    }
+  ]
+};
+
+export const getUnitDetails = (unitId) => {
+  const allTracks = [trackFotografi, trackDesain];
+  for (const track of allTracks) {
+    for (const level of track.levels) {
+      const unit = level.units.find(u => u.id === unitId);
+      if (unit) {
+        return { ...unit, trackId: track.id, levelId: level.id, levelNum: level.level };
+      }
+    }
+  }
+  return null;
+};
