@@ -97,18 +97,17 @@ export const trackFotografi = {
         { 
           id: 'photo-2-3', 
           title: 'Aperture: Bukaan Lensa', 
-          type: 'video', 
+          type: 'read', 
           xp: 30,
           content: `
             <h3>Mengatur Bukaan Lensa</h3>
-            <p>Aperture (atau f-stop) seperti pupil mata kita. Semakin besar ia terbuka, semakin banyak cahaya yang masuk.</p>
-            <div style="background: rgba(0,0,0,0.5); padding: 3rem; text-align: center; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);">
-              <span style="color: var(--text-muted);">▶ Simulasi Video: Memahami Aperture (f/1.4 vs f/16)</span>
-            </div>
+            <p>Aperture (atau f-stop) seperti pupil mata kita. Semakin besar ia terbuka, semakin banyak cahaya yang masuk ke dalam sensor.</p>
+            <img src="/images/aperture.png" alt="Ilustrasi Aperture" style="width:100%; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);" />
             <ul>
-              <li><strong>Aperture Besar (Misal f/1.8):</strong> Cahaya masuk lebih banyak, dan <em>Depth of Field</em> menjadi dangkal (background menjadi blur/bokeh). Cocok untuk foto potret.</li>
-              <li><strong>Aperture Kecil (Misal f/11):</strong> Cahaya masuk lebih sedikit, dan seluruh area gambar dari depan ke belakang menjadi tajam. Cocok untuk foto pemandangan.</li>
+              <li><strong>Aperture Besar (Misal f/1.4 atau f/1.8):</strong> Angka kecil berarti bukaan besar. Cahaya masuk sangat banyak, dan area yang fokus sangat sempit (<em>Depth of Field dangkal</em>). Hasilnya, subjek utama tajam namun latar belakangnya sangat blur (bokeh). Sangat cocok untuk foto potret atau produk.</li>
+              <li><strong>Aperture Kecil (Misal f/11 atau f/16):</strong> Angka besar berarti bukaan kecil. Cahaya yang masuk lebih sedikit, namun area yang fokus sangat luas. Hasilnya, seluruh gambar dari depan hingga belakang akan terlihat tajam. Biasanya digunakan untuk memotret pemandangan (lanskap).</li>
             </ul>
+            <p>Satu hal yang perlu diingat: Mengubah aperture tidak hanya berdampak pada blur (bokeh), tetapi juga pada jumlah cahaya. Jika Anda menggunakan aperture kecil (f/16) di tempat gelap, foto akan menjadi sangat gelap kecuali Anda menurunkan <em>shutter speed</em> atau menaikkan <em>ISO</em>.</p>
           `
         },
         { 
@@ -180,18 +179,21 @@ export const trackDesain = {
         { 
           id: 'design-1-3', 
           title: 'Prinsip Desain', 
-          type: 'video', 
+          type: 'read', 
           xp: 30,
           content: `
-            <h3>Aturan Main</h3>
-            <p>Jika elemen adalah bahan baku, maka prinsip desain adalah resep cara menyatukannya.</p>
-            <div style="background: rgba(0,0,0,0.5); padding: 3rem; text-align: center; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);">
-              <span style="color: var(--text-muted);">▶ Simulasi Video: Kontras dan Repetisi</span>
-            </div>
+            <h3>Aturan Main Visual</h3>
+            <p>Jika elemen (seperti garis dan bentuk) adalah bahan baku, maka <strong>Prinsip Desain</strong> adalah resep cara menyatukannya agar menjadi komposisi yang lezat dan masuk akal.</p>
+            <img src="/images/prinsip_desain.png" alt="Prinsip Desain" style="width:100%; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);" />
+            <p>Berikut adalah 5 prinsip utama yang harus dikuasai:</p>
             <ul>
-              <li><strong>Kontras:</strong> Membuat dua hal terlihat sangat berbeda (gelap vs terang, besar vs kecil). Kontras menarik perhatian mata.</li>
-              <li><strong>Keseimbangan (Balance):</strong> Distribusi visual elemen. Bisa simetris (sama rata kiri-kanan) atau asimetris (berbeda namun tetap terasa seimbang).</li>
+              <li><strong>Kontras (Contrast):</strong> Membuat dua hal yang berbeda menjadi "sangat berbeda" (misal: teks putih di atas latar hitam, atau font besar bersebelahan dengan font kecil). Kontras adalah cara terbaik untuk menarik perhatian mata dan menciptakan penekanan.</li>
+              <li><strong>Keseimbangan (Balance):</strong> Distribusi "berat visual" dalam desain. Bisa berupa simetris (kiri-kanan sama persis, memberi kesan formal/kaku) atau asimetris (berbeda bentuk namun terasa seimbang, memberi kesan dinamis/modern).</li>
+              <li><strong>Repetisi (Repetition):</strong> Mengulang elemen tertentu (seperti warna yang sama, jenis font yang sama, atau bentuk yang sama) di seluruh desain untuk menciptakan konsistensi dan kesatuan.</li>
+              <li><strong>Penjajaran (Alignment):</strong> Tidak ada elemen yang boleh diletakkan sembarangan. Setiap elemen harus memiliki koneksi visual dengan elemen lain di halaman (misal: rata kiri, rata tengah). Penjajaran membuat desain terlihat bersih dan teratur.</li>
+              <li><strong>Kedekatan (Proximity):</strong> Mengelompokkan elemen-elemen yang saling berkaitan secara berdekatan. Jika dua teks saling berjauhan, audiens akan mengira keduanya tidak berhubungan.</li>
             </ul>
+            <p>Dengan menerapkan prinsip-prinsip di atas, desain yang tadinya terlihat "amatir" akan seketika terlihat rapi dan profesional.</p>
           `
         },
         { id: 'design-1-quiz', title: 'Kuis Tujuan Desain', type: 'quiz', xp: 50 }
