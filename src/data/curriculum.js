@@ -256,8 +256,98 @@ export const trackDesain = {
   ]
 };
 
+export const trackStreaming = {
+  id: 'streaming',
+  title: 'Live Streaming',
+  description: 'Siaran langsung, manajemen alat, audio, dan OBS.',
+  levels: [
+    {
+      id: 'stream-lvl-1',
+      level: 1,
+      title: 'Broadcaster Pemula',
+      xpRequired: 0,
+      units: [
+        { 
+          id: 'stream-1-1', 
+          title: 'Pengenalan Setup Streaming', 
+          type: 'read', 
+          xp: 30,
+          content: `
+            <h3>Fondasi Siaran Langsung</h3>
+            <p>Live streaming menggabungkan berbagai perangkat keras dan lunak agar gambar dan suara Anda bisa sampai ke penonton dengan kualitas terbaik tanpa gangguan (delay atau lag).</p>
+            <img src="/images/streaming_setup.png" alt="Streaming Setup" style="width:100%; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);" />
+            <p>Alat-alat dasar untuk setup live streaming profesional:</p>
+            <ul>
+              <li><strong>Kamera & Lensa:</strong> Kamera Mirrorless atau Webcam berkualitas tinggi. Jika menggunakan Mirrorless, Anda membutuhkan lensa dengan <em>aperture</em> besar untuk efek blur latar belakang dan koneksi kabel HDMI.</li>
+              <li><strong>Capture Card:</strong> Alat penerjemah sinyal dari kamera (HDMI) menjadi sinyal digital (USB) yang bisa dibaca komputer.</li>
+              <li><strong>Pencahayaan (Lighting):</strong> Key Light (cahaya utama) dan Fill Light. Cahaya adalah kunci utama; webcam murah dengan cahaya bagus jauh lebih baik daripada kamera mahal tanpa cahaya.</li>
+            </ul>
+          `
+        },
+        { 
+          id: 'stream-1-2', 
+          title: 'Kabel, Koneksi & Cable Management', 
+          type: 'read', 
+          xp: 20,
+          content: `
+            <h3>Signal Chain: Urat Nadi Streaming</h3>
+            <p>Menghubungkan alat bukan sekadar colok-mencolok. Pahami alur sinyalnya (Signal Chain).</p>
+            <ul>
+              <li><strong>Kabel Video (HDMI & USB):</strong> HDMI dari kamera masuk ke Capture Card, kemudian USB dari Capture Card masuk ke Komputer. Hindari kabel HDMI yang terlalu panjang agar tidak <em>delay</em>.</li>
+              <li><strong>Kabel Audio (XLR & Jack 3.5mm):</strong> Mikrofon kelas studio menggunakan kabel XLR yang masuk ke Audio Interface, sebelum akhirnya dihubungkan ke komputer via USB.</li>
+            </ul>
+            <p><strong>Pra dan Pasca Cable Management:</strong> Selalu rapikan kabel menggunakan velcro. Kabel yang berantakan tidak hanya tidak enak dipandang, tapi juga berisiko tinggi tersandung dan merusak port alat-alat mahal Anda saat live.</p>
+          `
+        },
+        { id: 'stream-1-quiz', title: 'Kuis Hardware Streaming', type: 'quiz', xp: 50 }
+      ]
+    },
+    {
+      id: 'stream-lvl-2',
+      level: 2,
+      title: 'Pengendali Siaran',
+      xpRequired: 200,
+      units: [
+        { 
+          id: 'stream-2-1', 
+          title: 'Dasar Audio Mixing', 
+          type: 'read', 
+          xp: 30,
+          content: `
+            <h3>Menjaga Kualitas Suara</h3>
+            <p>Audio yang buruk akan langsung membuat penonton kabur, meskipun visual Anda sebagus film bioskop.</p>
+            <img src="/images/audio_mixer.png" alt="Audio Mixer" style="width:100%; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);" />
+            <p>Prinsip dasar pada Audio Mixer / Interface:</p>
+            <ul>
+              <li><strong>Gain vs Volume:</strong> <em>Gain</em> adalah seberapa sensitif mic menangkap suara dari ruangan. <em>Volume (Fader)</em> adalah seberapa keras suara tersebut dikirim ke penonton. Atur Gain secukupnya agar tidak "bocor", lalu naikkan Volume.</li>
+              <li><strong>Peaking (Zona Merah):</strong> Pastikan indikator lampu audio Anda berada di area hijau dan kuning. Jika masuk ke warna merah (peaking), suara akan pecah dan menyakitkan telinga penonton.</li>
+            </ul>
+          `
+        },
+        { 
+          id: 'stream-2-2', 
+          title: 'Operasional OBS Studio', 
+          type: 'read', 
+          xp: 30,
+          content: `
+            <h3>Pusat Komando: OBS Studio</h3>
+            <p>OBS (Open Broadcaster Software) adalah aplikasi standar industri untuk live streaming.</p>
+            <img src="/images/obs_studio.png" alt="OBS Studio" style="width:100%; border-radius: 12px; margin: 2rem 0; border: 1px solid var(--border-color);" />
+            <ul>
+              <li><strong>Scenes:</strong> Kumpulan layout. Anda bisa membuat scene "Starting Soon", "Just Chatting" (wajah penuh), dan "Gameplay" (layar game + wajah kecil).</li>
+              <li><strong>Sources:</strong> Elemen-elemen di dalam satu scene. Bisa berupa kamera (Video Capture Device), layar (Display Capture), gambar, atau teks.</li>
+              <li><strong>Audio Mixer Panel:</strong> Pastikan Anda melakukan <em>mute</em> pada audio desktop jika tidak ingin suara notifikasi komputer masuk ke siaran. Tambahkan filter <em>Noise Suppression</em> pada mikrofon untuk menghilangkan suara kipas PC.</li>
+            </ul>
+          `
+        },
+        { id: 'stream-2-quiz', title: 'Kuis Audio & OBS', type: 'quiz', xp: 80 }
+      ]
+    }
+  ]
+};
+
 export const getUnitDetails = (unitId) => {
-  const allTracks = [trackFotografi, trackDesain];
+  const allTracks = [trackFotografi, trackDesain, trackStreaming];
   for (const track of allTracks) {
     for (const level of track.levels) {
       const unit = level.units.find(u => u.id === unitId);

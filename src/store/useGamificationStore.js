@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { trackFotografi, trackDesain } from '../data/curriculum';
+import { trackFotografi, trackDesain, trackStreaming } from '../data/curriculum';
 
 const calculateLevel = (xp) => {
   if (xp >= 1400) return 5;
@@ -37,6 +37,7 @@ export const useGamificationStore = create(
       trackXP: {
         fotografi: 0,
         desain: 0,
+        streaming: 0,
       },
 
       login: (name, tracks) => set({
@@ -48,7 +49,7 @@ export const useGamificationStore = create(
         user: { name: 'Tamu', isLoggedIn: false },
         selectedTracks: [],
         completedUnits: [],
-        trackXP: { fotografi: 0, desain: 0 },
+        trackXP: { fotografi: 0, desain: 0, streaming: 0 },
       }),
 
       toggleTheme: () => set((state) => ({
@@ -95,7 +96,7 @@ export const useGamificationStore = create(
       isUnitUnlocked: (unitId, trackId) => {
         const state = get();
         // Simple linear unlock logic: find the unit in the track, check if previous is completed
-        const track = trackId === 'fotografi' ? trackFotografi : trackDesain;
+        const track = trackId === 'fotografi' ? trackFotografi : (trackId === 'desain' ? trackDesain : trackStreaming);
         let allUnits = [];
         track.levels.forEach(l => {
           allUnits = allUnits.concat(l.units);

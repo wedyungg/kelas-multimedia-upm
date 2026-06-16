@@ -4,7 +4,7 @@ import { useGamificationStore } from '../store/useGamificationStore';
 import { Camera, LogOut, Sun, Moon } from 'lucide-react';
 
 const Header = () => {
-  const { user, trackXP, logout, getTrackLevel, getTrackProgress, theme, toggleTheme } = useGamificationStore();
+  const { user, selectedTracks, trackXP, logout, getTrackLevel, getTrackProgress, theme, toggleTheme } = useGamificationStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -31,18 +31,21 @@ const Header = () => {
 
         {user.isLoggedIn ? (
           <div className="flex items-center gap-4">
-            <div className="flex flex-col items-end" style={{ marginRight: '1rem' }}>
-              <span className="text-sm text-muted">Level {getTrackLevel('fotografi')} Fotografer</span>
-              <div className="progress-track" style={{ width: '100px', height: '6px', marginTop: '4px' }}>
-                <div className="progress-fill" style={{ width: `${getTrackProgress('fotografi')}%` }}></div>
-              </div>
-            </div>
-            <div className="flex flex-col items-end" style={{ marginRight: '1rem' }}>
-              <span className="text-sm text-muted">Level {getTrackLevel('desain')} Desainer</span>
-              <div className="progress-track" style={{ width: '100px', height: '6px', marginTop: '4px' }}>
-                <div className="progress-fill" style={{ width: `${getTrackProgress('desain')}%` }}></div>
-              </div>
-            </div>
+            {selectedTracks.map(trackId => {
+              const isPhoto = trackId === 'fotografi';
+              const isDesign = trackId === 'desain';
+              const label = isPhoto ? 'Fotografer' : (isDesign ? 'Desainer' : 'Broadcaster');
+              const colorVar = isPhoto ? 'var(--primary-accent)' : (isDesign ? 'var(--secondary-accent)' : 'var(--success)');
+              
+              return (
+                <div key={trackId} className="flex flex-col items-end" style={{ marginRight: '1rem' }}>
+                  <span className="text-sm text-muted">Level {getTrackLevel(trackId)} {label}</span>
+                  <div className="progress-track" style={{ width: '100px', height: '6px', marginTop: '4px' }}>
+                    <div className="progress-fill" style={{ width: `${getTrackProgress(trackId)}%`, background: colorVar }}></div>
+                  </div>
+                </div>
+              );
+            })}
             <button onClick={handleLogout} className="flex items-center gap-2 btn-secondary" style={{ padding: '0.5rem 1rem' }}>
               <LogOut size={16} />
               <span className="text-sm">Keluar</span>

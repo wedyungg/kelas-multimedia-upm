@@ -1,17 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useGamificationStore } from '../store/useGamificationStore';
-import { trackFotografi, trackDesain } from '../data/curriculum';
-import { Camera, PenTool, PlayCircle } from 'lucide-react';
+import { trackFotografi, trackDesain, trackStreaming } from '../data/curriculum';
+import { Camera, PenTool, Radio, PlayCircle } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, selectedTracks, addTrack, trackXP, getTrackLevel, getTrackProgress } = useGamificationStore();
 
   const getTrackData = (trackId) => {
-    return trackId === 'fotografi' ? trackFotografi : trackDesain;
+    if (trackId === 'fotografi') return trackFotografi;
+    if (trackId === 'desain') return trackDesain;
+    return trackStreaming;
   };
 
-  const allTrackIds = ['fotografi', 'desain'];
+  const allTrackIds = ['fotografi', 'desain', 'streaming'];
   const unselectedTracks = allTrackIds.filter(id => !selectedTracks.includes(id));
 
   return (
@@ -28,14 +30,16 @@ const Dashboard = () => {
           const level = getTrackLevel(trackId);
           const progress = getTrackProgress(trackId);
           const isPhoto = trackId === 'fotografi';
-          const Icon = isPhoto ? Camera : PenTool;
-          const colorVar = isPhoto ? 'var(--primary-accent)' : 'var(--secondary-accent)';
-          const lightColorVar = isPhoto ? 'var(--primary-accent-light)' : '#f472b6'; // pink-400
+          const isDesign = trackId === 'desain';
+          const Icon = isPhoto ? Camera : (isDesign ? PenTool : Radio);
+          const colorVar = isPhoto ? 'var(--primary-accent)' : (isDesign ? 'var(--secondary-accent)' : 'var(--success)');
+          const lightColorVar = isPhoto ? 'var(--primary-accent-light)' : (isDesign ? '#f472b6' : '#34d399'); 
+          const bgRgba = isPhoto ? '107, 70, 193' : (isDesign ? '236, 72, 153' : '16, 185, 129');
 
           return (
             <div key={trackId} className="card flex flex-col gap-4">
               <div className="flex items-center gap-4">
-                <div style={{ background: `rgba(${isPhoto ? '107, 70, 193' : '236, 72, 153'}, 0.1)`, padding: '1rem', borderRadius: 'var(--radius-md)' }}>
+                <div style={{ background: `rgba(${bgRgba}, 0.1)`, padding: '1rem', borderRadius: 'var(--radius-md)' }}>
                   <Icon size={32} color={colorVar} />
                 </div>
                 <div>
@@ -70,7 +74,8 @@ const Dashboard = () => {
             {unselectedTracks.map(trackId => {
               const track = getTrackData(trackId);
               const isPhoto = trackId === 'fotografi';
-              const Icon = isPhoto ? Camera : PenTool;
+              const isDesign = trackId === 'desain';
+              const Icon = isPhoto ? Camera : (isDesign ? PenTool : Radio);
               
               return (
                 <div key={trackId} className="card flex flex-col gap-4" style={{ opacity: 0.8, borderStyle: 'dashed' }}>
