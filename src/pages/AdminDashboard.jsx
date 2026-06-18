@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { collection, getDocs, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
-import { LogOut, Plus, Trash2, Edit } from 'lucide-react';
+import { collection, getDocs, addDoc, deleteDoc, doc, serverTimestamp, query, orderBy } from 'firebase/firestore';
+import { LogOut, Plus, Trash2, Edit, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 
 const AdminDashboard = () => {
   const [user, setUser] = useState(null);
   const [assignments, setAssignments] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
+  const [expandedAssignmentId, setExpandedAssignmentId] = useState(null);
   const navigate = useNavigate();
 
   // Form State
@@ -18,11 +20,32 @@ const AdminDashboard = () => {
   const [duration, setDuration] = useState('');
   const [description, setDescription] = useState('');
 
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      // Ambil tugas (assignments)
+      const qAssignments = query(collection(db, 'assignments'), orderBy('createdAt', 'desc'));
+      const snapshotA = await getDocs(qAssignments);
+      const dataA = snapshotA.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setAssignments(dataA);
+
+      // Ambil pengumpulan (submissions)
+      const qSubmissions = query(collection(db, 'submissions'), orderBy('createdAt', 'desc'));
+      const snapshotS = await getDocs(qSubmissions);
+      const dataS = snapshotS.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setSubmissions(dataS);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        fetchAssignments();
+        fetchData();
       } else {
         navigate('/admin/login');
       }
@@ -30,22 +53,6 @@ const AdminDashboard = () => {
 
     return () => unsubscribe();
   }, [navigate]);
-
-  const fetchAssignments = async () => {
-    setIsLoading(true);
-    try {
-      const querySnapshot = await getDocs(collection(db, 'assignments'));
-      const data = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setAssignments(data);
-    } catch (error) {
-      console.error("Error fetching assignments:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -71,7 +78,7 @@ const AdminDashboard = () => {
       setIsAdding(false);
       
       // Refresh list
-      fetchAssignments();
+      fetchData();
     } catch (error) {
       console.error("Error adding document: ", error);
       alert("Gagal menambahkan tugas");
@@ -79,10 +86,10 @@ const AdminDashboard = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Apakah Anda yakin ingin menghapus tugas ini?")) {
+    if (window.confirm("Apakah Anda yakin ingin menghapus tugas ini? (Pengumpulan tugas oleh peserta juga bisa menjadi yatim piatu)")) {
       try {
         await deleteDoc(doc(db, 'assignments', id));
-        fetchAssignments();
+        fetchData();
       } catch (error) {
         console.error("Error deleting document: ", error);
         alert("Gagal menghapus tugas");
@@ -163,22 +170,80 @@ const AdminDashboard = () => {
           <p className="text-muted">Belum ada tugas yang dibuat.</p>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-          {assignments.map(assignment => (
-            <div key={assignment.id} className="card flex flex-col gap-4">
-              <div className="flex justify-between items-start">
-                <span className="text-xs font-medium" style={{ background: 'var(--bg-element)', padding: '0.25rem 0.5rem', borderRadius: '4px' }}>
-                  {assignment.trackId.toUpperCase()}
-                </span>
-                <button onClick={() => handleDelete(assignment.id)} className="text-danger hover-text-main transition-colors" title="Hapus Tugas">
-                  <Trash2 size={18} color="var(--danger)" />
-                </button>
+        <div className="flex flex-col gap-4">
+          {assignments.map(assignment => {
+            const assignmentSubmissions = submissions.filter(s => s.assignmentId === assignment.id);
+            const isExpanded = expandedAssignmentId === assignment.id;
+            
+            return (
+              <div key={assignment.id} className="card" style={{ padding: '0', overflow: 'hidden' }}>
+                <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div className="flex justify-between items-start">
+                    <span className="text-xs font-medium" style={{ background: 'var(--bg-element)', padding: '0.25rem 0.5rem', borderRadius: '4px' }}>
+                      {assignment.trackId.toUpperCase()}
+                    </span>
+                    <button onClick={() => handleDelete(assignment.id)} className="text-danger hover-text-main transition-colors" title="Hapus Tugas">
+                      <Trash2 size={18} color="var(--danger)" />
+                    </button>
+                  </div>
+                  
+                  <div>
+                    <h3 className="heading-md" style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>{assignment.title}</h3>
+                    <p className="text-sm text-muted">Durasi: {assignment.duration}</p>
+                  </div>
+                  
+                  <div style={{ marginTop: '0.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}>
+                    <button 
+                      onClick={() => setExpandedAssignmentId(isExpanded ? null : assignment.id)}
+                      className="flex items-center justify-between w-full text-sm font-medium hover-text-main transition-colors"
+                      style={{ color: isExpanded ? 'var(--primary-accent-light)' : 'var(--text-main)' }}
+                    >
+                      <span className="flex items-center gap-2">
+                        Lihat Pengumpulan 
+                        <span style={{ background: assignmentSubmissions.length > 0 ? 'var(--primary-accent)' : 'var(--bg-element)', color: assignmentSubmissions.length > 0 ? '#fff' : 'inherit', padding: '0.1rem 0.5rem', borderRadius: '1rem', fontSize: '0.75rem' }}>
+                          {assignmentSubmissions.length}
+                        </span>
+                      </span>
+                      {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                    </button>
+                  </div>
+                </div>
+
+                {isExpanded && (
+                  <div style={{ background: 'var(--bg-inactive-heavy)', padding: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
+                    {assignmentSubmissions.length === 0 ? (
+                      <p className="text-muted text-sm text-center">Belum ada yang mengumpulkan tugas ini.</p>
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                        {assignmentSubmissions.map((sub, index) => (
+                          <div key={sub.id} className="flex justify-between items-center bg-main p-3" style={{ background: 'var(--bg-main)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
+                            <div className="flex items-center gap-3">
+                              <div className="font-bold text-muted" style={{ width: '24px' }}>#{index + 1}</div>
+                              <div>
+                                <p className="font-medium text-sm">{sub.studentName}</p>
+                                <p className="text-xs text-muted">
+                                  {sub.createdAt?.toDate ? sub.createdAt.toDate().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute:'2-digit' }) : 'Baru saja'}
+                                </p>
+                              </div>
+                            </div>
+                            <a 
+                              href={sub.submissionLink} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="btn-secondary flex items-center gap-2 text-sm"
+                              style={{ padding: '0.5rem 1rem' }}
+                            >
+                              Buka Karya <ExternalLink size={14} />
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-              
-              <h3 className="heading-md" style={{ fontSize: '1.25rem' }}>{assignment.title}</h3>
-              <p className="text-sm text-muted">Durasi: {assignment.duration}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db } from '../lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useGamificationStore } from '../store/useGamificationStore';
-import { ArrowLeft, CheckCircle, Send, AlertCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Send, AlertCircle, User } from 'lucide-react';
 
 const AssignmentDetail = () => {
   const { assignmentId } = useParams();
@@ -13,6 +13,7 @@ const AssignmentDetail = () => {
   
   const { user, completedAssignments, completeAssignment } = useGamificationStore();
   
+  const [studentName, setStudentName] = useState(user?.name || '');
   const [submissionLink, setSubmissionLink] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -48,41 +49,27 @@ const AssignmentDetail = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!submissionLink.trim()) return;
+    if (!submissionLink.trim() || !studentName.trim()) return;
 
     setIsSubmitting(true);
 
-    // Simulate network request or Web3Forms integration
-    // To make this work with Web3Forms, replace the URL and add your Access Key below:
-    const web3formsAccessKey = ""; // PENGISI PELATIHAN: Masukkan Access Key Web3Forms Anda di sini
-
     try {
-      if (web3formsAccessKey) {
-        await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            access_key: web3formsAccessKey,
-            subject: `Pengumpulan Tugas: ${assignment.title} dari ${user.name}`,
-            name: user.name,
-            assignment_id: assignment.id,
-            submission_link: submissionLink
-          })
-        });
-      } else {
-        // Simulated delay if no access key is provided
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        console.warn("Web3Forms Access Key is not set. Submission simulated locally.");
-      }
+      // Simpan data pengumpulan ke koleksi 'submissions' di Firestore
+      await addDoc(collection(db, 'submissions'), {
+        assignmentId,
+        assignmentTitle: assignment.title,
+        studentName,
+        submissionLink,
+        createdAt: serverTimestamp()
+      });
 
+      // Tandai tugas selesai di state lokal (Gamification)
       completeAssignment(assignment.id);
       setShowSuccess(true);
+      setSubmissionLink('');
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Gagal mengirim tugas. Silakan coba lagi.");
+      console.error("Gagal mengirim tugas:", error);
+      alert("Terjadi kesalahan saat mengirim tugas. Pastikan Anda terhubung ke internet dan Firestore Security Rules sudah diupdate.");
     } finally {
       setIsSubmitting(false);
     }
@@ -146,36 +133,59 @@ const AssignmentDetail = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <label htmlFor="submission" className="font-medium text-sm">Link Karya (Google Drive / Portofolio)</label>
-                <input 
-                  id="submission"
-                  type="url" 
+              <div className="flex flex-col gap-1">
+                <label htmlFor="studentName" className="text-sm font-medium flex items-center gap-2">
+                  <User size={16} /> Nama Anda
+                </label>
+                <input
+                  type="text"
+                  id="studentName"
+                  value={studentName}
+                  onChange={(e) => setStudentName(e.target.value)}
+                  placeholder="Masukkan nama lengkap Anda"
                   required
-                  placeholder="https://drive.google.com/..."
-                  value={submissionLink}
-                  onChange={(e) => setSubmissionLink(e.target.value)}
                   style={{
                     width: '100%',
-                    padding: '1rem',
+                    padding: '0.75rem',
                     borderRadius: 'var(--radius-md)',
                     border: '1px solid var(--border-color)',
-                    background: 'var(--bg-inactive-heavy)',
-                    color: 'var(--text-main)',
-                    fontFamily: 'inherit',
-                    fontSize: '1rem'
+                    background: 'var(--bg-inactive)',
+                    color: 'var(--text-main)'
                   }}
                 />
-                <div className="flex items-start gap-2 text-sm text-muted" style={{ marginTop: '0.5rem' }}>
-                  <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
-                  <span>Pastikan link yang diberikan dapat diakses publik agar instruktur bisa melihat karya Anda.</span>
-                </div>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label htmlFor="submissionLink" className="text-sm font-medium flex items-center gap-2">
+                  <Send size={16} /> Link Karya (Google Drive / Figma / dll)
+                </label>
+                <input
+                  type="url"
+                  id="submissionLink"
+                  value={submissionLink}
+                  onChange={(e) => setSubmissionLink(e.target.value)}
+                  placeholder="https://..."
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1px solid var(--border-color)',
+                    background: 'var(--bg-inactive)',
+                    color: 'var(--text-main)'
+                  }}
+                />
+              </div>
+              
+              <div className="flex items-start gap-2 text-sm text-muted" style={{ marginTop: '0.5rem' }}>
+                <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                <span>Pastikan link yang diberikan dapat diakses publik agar instruktur bisa melihat karya Anda.</span>
               </div>
               
               <button 
                 type="submit" 
                 className="btn-primary flex items-center justify-center gap-2" 
-                disabled={isSubmitting || !submissionLink.trim()}
+                disabled={isSubmitting || !submissionLink.trim() || !studentName.trim()}
                 style={{ marginTop: '1rem' }}
               >
                 {isSubmitting ? 'Mengirim...' : (
