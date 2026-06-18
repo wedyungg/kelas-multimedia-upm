@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGamificationStore } from '../store/useGamificationStore';
-import { Camera, LogOut, Sun, Moon } from 'lucide-react';
+import { Camera, LogOut, Sun, Moon, ClipboardList } from 'lucide-react';
 
 const Header = () => {
   const { user, selectedTracks, trackXP, logout, getTrackLevel, getTrackProgress, theme, toggleTheme } = useGamificationStore();
@@ -46,6 +46,10 @@ const Header = () => {
                 </div>
               );
             })}
+            <Link to="/assignments" className="flex items-center gap-2 text-muted hover-text-main transition-colors" style={{ padding: '0.5rem 1rem', marginRight: '1rem', borderRight: '1px solid var(--border-color)' }}>
+              <ClipboardList size={18} />
+              <span className="text-sm font-medium">Tugas</span>
+            </Link>
             <button onClick={handleLogout} className="flex items-center gap-2 btn-secondary" style={{ padding: '0.5rem 1rem' }}>
               <LogOut size={16} />
               <span className="text-sm">Keluar</span>

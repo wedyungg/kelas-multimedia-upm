@@ -7,6 +7,8 @@ import Dashboard from './pages/Dashboard';
 import Track from './pages/Track';
 import Unit from './pages/Unit';
 import Quiz from './pages/Quiz';
+import Assignments from './pages/Assignments';
+import AssignmentDetail from './pages/AssignmentDetail';
 import { useGamificationStore } from './store/useGamificationStore';
 
 const ProtectedRoute = ({ children }) => {
@@ -46,6 +48,16 @@ const App = () => {
           <Route path="quiz/:unitId" element={
             <ProtectedRoute>
               <Quiz />
+            </ProtectedRoute>
+          } />
+          <Route path="assignments" element={
+            <ProtectedRoute>
+              <Assignments />
+            </ProtectedRoute>
+          } />
+          <Route path="assignment/:assignmentId" element={
+            <ProtectedRoute>
+              <AssignmentDetail />
             </ProtectedRoute>
           } />
         </Route>

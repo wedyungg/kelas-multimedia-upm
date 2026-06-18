@@ -34,6 +34,7 @@ export const useGamificationStore = create(
       theme: 'dark', // 'dark' or 'light'
       selectedTracks: [], // 'fotografi', 'desain'
       completedUnits: [], // array of unit IDs
+      completedAssignments: [], // array of assignment IDs
       trackXP: {
         fotografi: 0,
         desain: 0,
@@ -49,6 +50,7 @@ export const useGamificationStore = create(
         user: { name: 'Tamu', isLoggedIn: false },
         selectedTracks: [],
         completedUnits: [],
+        completedAssignments: [],
         trackXP: { fotografi: 0, desain: 0, streaming: 0 },
       }),
 
@@ -82,6 +84,13 @@ export const useGamificationStore = create(
             ...state.trackXP,
             [trackId]: newXP
           }
+        };
+      }),
+
+      completeAssignment: (assignmentId) => set((state) => {
+        if (state.completedAssignments.includes(assignmentId)) return state;
+        return {
+          completedAssignments: [...state.completedAssignments, assignmentId]
         };
       }),
 
