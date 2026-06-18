@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useGamificationStore } from '../store/useGamificationStore';
-import { assignments } from '../data/assignments';
+import { db } from '../lib/firebase';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { CheckCircle, Clock, Send } from 'lucide-react';
 
 const Assignments = () => {
   const { selectedTracks, completedAssignments } = useGamificationStore();
+  const [assignments, setAssignments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        const q = query(collection(db, 'assignments'), orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setAssignments(data);
+      } catch (error) {
+        console.error("Error fetching assignments:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAssignments();
+  }, []);
 
   // Filter assignments based on selected tracks
   const relevantAssignments = assignments.filter(a => selectedTracks.includes(a.trackId));
@@ -18,7 +41,11 @@ const Assignments = () => {
         <p className="text-muted text-lg">Kumpulkan portofolio dan proyek Anda untuk dinilai oleh instruktur.</p>
       </div>
 
-      {selectedTracks.length === 0 ? (
+      {isLoading ? (
+        <div className="card text-center" style={{ padding: '3rem' }}>
+          <p className="text-muted">Memuat daftar tugas terbaru dari server...</p>
+        </div>
+      ) : selectedTracks.length === 0 ? (
         <div className="card text-center" style={{ padding: '3rem' }}>
           <p className="text-muted mb-4">Anda belum memilih track pembelajaran.</p>
           <Link to="/dashboard" className="btn-primary">Pilih Track di Dashboard</Link>

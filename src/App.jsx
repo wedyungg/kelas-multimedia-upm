@@ -9,6 +9,8 @@ import Unit from './pages/Unit';
 import Quiz from './pages/Quiz';
 import Assignments from './pages/Assignments';
 import AssignmentDetail from './pages/AssignmentDetail';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 import { useGamificationStore } from './store/useGamificationStore';
 
 const ProtectedRoute = ({ children }) => {
@@ -60,6 +62,8 @@ const App = () => {
               <AssignmentDetail />
             </ProtectedRoute>
           } />
+          <Route path="admin/login" element={<AdminLogin />} />
+          <Route path="admin/dashboard" element={<AdminDashboard />} />
         </Route>
       </Routes>
     </Router>

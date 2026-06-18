@@ -1,18 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getAssignmentDetails } from '../data/assignments';
+import { db } from '../lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 import { useGamificationStore } from '../store/useGamificationStore';
 import { ArrowLeft, CheckCircle, Send, AlertCircle } from 'lucide-react';
 
 const AssignmentDetail = () => {
   const { assignmentId } = useParams();
   const navigate = useNavigate();
-  const assignment = getAssignmentDetails(assignmentId);
+  const [assignment, setAssignment] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  
   const { user, completedAssignments, completeAssignment } = useGamificationStore();
   
   const [submissionLink, setSubmissionLink] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    const fetchAssignment = async () => {
+      try {
+        const docRef = doc(db, 'assignments', assignmentId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setAssignment({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          setAssignment(null);
+        }
+      } catch (error) {
+        console.error("Error fetching assignment:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAssignment();
+  }, [assignmentId]);
+
+  if (isLoading) {
+    return <div className="container" style={{ padding: '4rem 0' }}>Memuat tugas...</div>;
+  }
 
   if (!assignment) {
     return <div className="container" style={{ padding: '4rem 0' }}>Tugas tidak ditemukan.</div>;
